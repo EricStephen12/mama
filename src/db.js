@@ -45,6 +45,15 @@ async function initDB() {
       saved_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(user_id, meal_id)
     );
+
+    CREATE TABLE IF NOT EXISTS password_resets (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id UUID REFERENCES users(id) ON DELETE CASCADE UNIQUE NOT NULL,
+      token TEXT NOT NULL,
+      expires_at TIMESTAMPTZ NOT NULL,
+      used BOOLEAN DEFAULT false,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
   `);
   console.log('Database tables ready');
 }

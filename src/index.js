@@ -6,6 +6,8 @@ const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 const decisionRoutes = require('./routes/decisions');
 
+const forgotRoutes = require('./routes/forgot');
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -19,6 +21,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', forgotRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/decisions', decisionRoutes);
 app.use('/api/saved', (req, res, next) => {
