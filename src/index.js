@@ -3,10 +3,11 @@ const cors = require('cors');
 const { initDB } = require('./db');
 
 const authRoutes = require('./routes/auth');
-const profileRoutes = require('./routes/profile');
-const decisionRoutes = require('./routes/decisions');
-
 const forgotRoutes = require('./routes/forgot');
+const profileRoutes = require('./routes/profile');
+const historyRoutes = require('./routes/history');
+const mealsRoutes = require('./routes/meals');
+const pricesRoutes = require('./routes/prices');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -16,25 +17,26 @@ app.use(express.json());
 
 // Health check
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', app: 'mama-backend', version: '1.0.0' });
+  res.json({ status: 'ok', app: 'mama-backend', version: '2.0.0' });
 });
 
-// Routes
+// Auth
 app.use('/api/auth', authRoutes);
 app.use('/api/auth', forgotRoutes);
+
+// Profile
 app.use('/api/profile', profileRoutes);
-app.use('/api/decisions', decisionRoutes);
-app.use('/api/saved', (req, res, next) => {
-  // redirect /api/saved to decisions router saved endpoints
-  req.url = '/saved' + req.url;
-  decisionRoutes(req, res, next);
-});
+
+// Mama Kitchen — new
+app.use('/api/history', historyRoutes);
+app.use('/api/meals', mealsRoutes);
+app.use('/api/prices', pricesRoutes);
 
 // Start
 initDB()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`Mama backend running on port ${PORT}`);
+      console.log(`Mama Kitchen backend v2 running on port ${PORT}`);
     });
   })
   .catch((err) => {
